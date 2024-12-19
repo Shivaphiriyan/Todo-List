@@ -57,10 +57,9 @@
             background-color: #c82333;
         }
         .completed {
-         text-decoration: line-through;
-         color: #aaa;
+            text-decoration: line-through;
+            color: #aaa;
         }
-
     </style>
 </head>
 <body>
@@ -68,10 +67,11 @@
     <input id="imput" placeholder="Enter your task">
     <button onclick="add()">Add</button>
     <ul id="list-container">
-        <li>Hello 
-            " <button onclick='deleteitem(event)'>Delete</button>" +
-            " <button onclick='editItem(event)'>Edit</button>";
-            " <button onclick='toggleComplete(event)'>Complete</button>";
+        <li>
+            Hello 
+            <button onclick="deleteitem(event)">Delete</button>
+            <button onclick="editItem(event)">Edit</button>
+            <button onclick="toggleComplete(event)">Complete</button>
         </li>
     </ul>
 
@@ -85,7 +85,10 @@
                 return;
             }
             var listitem = document.createElement("li");
-            listitem.innerHTML = input.value + " <button onclick='deleteitem(event)'>Delete</button>";
+            listitem.innerHTML = input.value + 
+                " <button onclick='deleteitem(event)'>Delete</button>" +
+                " <button onclick='editItem(event)'>Edit</button>" +
+                " <button onclick='toggleComplete(event)'>Complete</button>";
             ul.append(listitem);
             input.value = ""; // Clear the input field
         }
@@ -95,17 +98,16 @@
         }
 
         function editItem(event) {
-        const listItem = event.target.parentElement;
-        const newText = prompt("Edit your task:", listItem.firstChild.textContent.trim());
+            const listItem = event.target.parentElement;
+            const newText = prompt("Edit your task:", listItem.firstChild.textContent.trim());
             if (newText) {
-             listItem.firstChild.textContent = newText + " ";
+                listItem.firstChild.textContent = newText + " ";
             }
         }
+
         function toggleComplete(event) {
-         event.target.parentElement.classList.toggle("completed");
+            event.target.parentElement.classList.toggle("completed");
         }
-
-
     </script>
 </body>
 </html>
