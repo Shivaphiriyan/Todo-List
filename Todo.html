@@ -10,14 +10,30 @@
             margin: 20px;
             padding: 0;
             background-color: #f4f4f9;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.dark-mode {
+            background-color: #333;
+            color: #f4f4f9;
         }
         h1 {
             text-align: center;
-            color: #333;
+        }
+        #controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
         #imput {
             padding: 10px;
-            width: 70%;
+            width: 60%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #category {
+            padding: 10px;
+            width: 20%;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
@@ -48,6 +64,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            animation: fadeIn 0.5s ease-in-out;
         }
         li button {
             background-color: #dc3545;
@@ -60,53 +77,84 @@
             text-decoration: line-through;
             color: #aaa;
         }
+        .search-bar {
+            padding: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
     <h1>My To-Do List</h1>
-    <input id="imput" placeholder="Enter your task">
-    <button onclick="add()">Add</button>
-    <ul id="list-container">
-        <li>
-            Hello 
-            <button onclick="deleteitem(event)">Delete</button>
-            <button onclick="editItem(event)">Edit</button>
-            <button onclick="toggleComplete(event)">Complete</button>
-        </li>
-    </ul>
+    <div id="controls">
+        <input id="imput" placeholder="Enter your task">
+        <select id="category">
+            <option value="Personal">Personal</option>
+            <option value="Work">Work</option>
+            <option value="Other">Other</option>
+        </select>
+        <button onclick="add()">Add</button>
+        <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    </div>
+    <input type="text" class="search-bar" id="search" placeholder="Search tasks..." oninput="searchTasks()">
+    <ul id="list-container"></ul>
 
     <script>
-        var ul = document.getElementById("list-container");
-        var input = document.getElementById("imput");
+        const ul = document.getElementById("list-container");
+        const input = document.getElementById("imput");
+        const category = document.getElementById("category");
+        const search = document.getElementById("search");
 
         function add() {
             if (input.value.trim() === "") {
                 alert("Please enter a task!");
                 return;
             }
-            var listitem = document.createElement("li");
-            listitem.innerHTML = input.value + 
-                " <button onclick='deleteitem(event)'>Delete</button>" +
-                " <button onclick='editItem(event)'>Edit</button>" +
-                " <button onclick='toggleComplete(event)'>Complete</button>";
+            const listitem = document.createElement("li");
+            listitem.innerHTML = `
+                <span>${input.value} (${category.value})</span>
+                <div>
+                    <button onclick="deleteitem(event)">Delete</button>
+                    <button onclick="editItem(event)">Edit</button>
+                    <button onclick="toggleComplete(event)">Complete</button>
+                </div>`;
             ul.append(listitem);
             input.value = ""; // Clear the input field
         }
 
         function deleteitem(event) {
-            event.target.parentElement.remove();
+            event.target.closest("li").remove();
         }
 
         function editItem(event) {
-            const listItem = event.target.parentElement;
+            const listItem = event.target.closest("li");
             const newText = prompt("Edit your task:", listItem.firstChild.textContent.trim());
             if (newText) {
-                listItem.firstChild.textContent = newText + " ";
+                listItem.firstChild.textContent = newText + ` (${category.value})`;
             }
         }
 
         function toggleComplete(event) {
-            event.target.parentElement.classList.toggle("completed");
+            event.target.closest("li").classList.toggle("completed");
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+        }
+
+        function searchTasks() {
+            const filter = search.value.toLowerCase();
+            const tasks = ul.querySelectorAll("li");
+            tasks.forEach(task => {
+                const text = task.firstChild.textContent.toLowerCase();
+                task.style.display = text.includes(filter) ? "flex" : "none";
+            });
         }
     </script>
 </body>
