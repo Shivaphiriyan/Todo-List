@@ -1,24 +1,111 @@
-<input id="imput">
-<button onclick="add()">Add</button>
-<ul id="list-container">
-    <li>Hello 
-        <button onclick="deleteitem(event)">Delete</button>
-    </li>
-</ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        #imput {
+            padding: 10px;
+            width: 70%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        li {
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        li button {
+            background-color: #dc3545;
+            padding: 5px 10px;
+        }
+        li button:hover {
+            background-color: #c82333;
+        }
+        .completed {
+         text-decoration: line-through;
+         color: #aaa;
+        }
 
-<script>
-    var ul= document.getElementById("list-container")
-    var input= document.getElementById("imput")
-    function add()
-    {
-        var listitem = document.createElement("li")
-        listitem.innerHTML=imput.value +"<button onclick='deleteitem(event)'>Delete<button>"
-        ul.append(listitem)
+    </style>
+</head>
+<body>
+    <h1>My To-Do List</h1>
+    <input id="imput" placeholder="Enter your task">
+    <button onclick="add()">Add</button>
+    <ul id="list-container">
+        <li>Hello 
+            " <button onclick='deleteitem(event)'>Delete</button>" +
+            " <button onclick='editItem(event)'>Edit</button>";
+            " <button onclick='toggleComplete(event)'>Complete</button>";
+        </li>
+    </ul>
 
-    }
+    <script>
+        var ul = document.getElementById("list-container");
+        var input = document.getElementById("imput");
 
-    function deleteitem(event)
-    {
-        event.target.parentElement.remove()
-    } 
-</script>
+        function add() {
+            if (input.value.trim() === "") {
+                alert("Please enter a task!");
+                return;
+            }
+            var listitem = document.createElement("li");
+            listitem.innerHTML = input.value + " <button onclick='deleteitem(event)'>Delete</button>";
+            ul.append(listitem);
+            input.value = ""; // Clear the input field
+        }
+
+        function deleteitem(event) {
+            event.target.parentElement.remove();
+        }
+
+        function editItem(event) {
+        const listItem = event.target.parentElement;
+        const newText = prompt("Edit your task:", listItem.firstChild.textContent.trim());
+            if (newText) {
+             listItem.firstChild.textContent = newText + " ";
+            }
+        }
+        function toggleComplete(event) {
+         event.target.parentElement.classList.toggle("completed");
+        }
+
+
+    </script>
+</body>
+</html>
